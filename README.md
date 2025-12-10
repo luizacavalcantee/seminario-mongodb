@@ -1,6 +1,6 @@
-# API V360 - Sistema de Automação Fiscal
+# API - Sistema de Automação Fiscal
 
-Sistema de demonstração para seminário sobre MongoDB, simulando o V360 - plataforma de automação fiscal.
+Sistema de demonstração para seminário sobre MongoDB - plataforma de automação fiscal.
 
 ## 📋 Funcionalidades
 
@@ -294,6 +294,64 @@ docker-compose logs -f
 docker-compose down -v
 docker system prune -a
 ```
+
+## 🐚 MongoDB Shell (para demonstração do seminário)
+
+### Acessar o MongoDB Shell
+
+```powershell
+# Se estiver usando Docker Compose
+docker exec -it mongodb-v360 mongosh
+
+# Se tiver mongosh instalado localmente
+mongosh "mongodb://localhost:27017"
+```
+
+### Popular com dados de exemplo
+
+```powershell
+# Executar o script de seed
+docker exec -i mongodb-v360 mongosh < seed-data.js
+
+# Ou copiar e colar o conteúdo de seed-data.js no mongosh
+```
+
+### Consultas úteis para demonstração
+
+```javascript
+// Selecionar o banco
+use v360_fiscal
+
+// Ver todos os documentos
+db.documentos_fiscais.find().pretty()
+
+// Contar por tipo
+db.documentos_fiscais.countDocuments({ tipo_documento: "NFe" })
+db.documentos_fiscais.countDocuments({ tipo_documento: "NFSe" })
+
+// Demonstrar flexibilidade de esquema
+db.documentos_fiscais.findOne({ tipo_documento: "NFe" })
+db.documentos_fiscais.findOne({ tipo_documento: "NFSe" })
+
+// Validação inteligente (≤3 itens)
+db.documentos_fiscais.find({
+  status: "Capturado",
+  "itens.3": { $exists: false }
+})
+
+// Agregação - Total por tipo
+db.documentos_fiscais.aggregate([
+  {
+    $group: {
+      _id: "$tipo_documento",
+      total: { $sum: "$valor_total" },
+      quantidade: { $sum: 1 }
+    }
+  }
+])
+```
+
+📖 **Guia completo**: Veja `MONGODB_SHELL_GUIDE.md` para mais exemplos e demonstrações.
 
 ## 👨‍💻 Desenvolvimento
 
