@@ -26,7 +26,7 @@ app.use("/", documentosRoutes);
 // Rota raiz para informações básicas
 app.get("/", (req, res) => {
   res.json({
-    mensagem: "🚀 API V360 - Sistema de Automação Fiscal",
+    mensagem: "🚀 API Gestão Fiscal - Sistema de Automação Fiscal",
     versao: "1.0.0",
     documentacao: `http://localhost:${port}/api-docs`,
     endpoints: {
@@ -49,7 +49,7 @@ async function startServer(): Promise<void> {
     // Início do Servidor Express
     app.listen(port, () => {
       console.log(`\n======================================================`);
-      console.log(`🚀 API V360 rodando em: http://localhost:${port}`);
+      console.log(`🚀 API Gestão Fiscal rodando em: http://localhost:${port}`);
       console.log(`📚 Documentação Swagger: http://localhost:${port}/api-docs`);
       console.log(`======================================================\n`);
       console.log(`Endpoints disponíveis:`);

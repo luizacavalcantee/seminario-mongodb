@@ -1,4 +1,4 @@
-# 🐚 Guia MongoDB Shell - Projeto V360
+# 🐚 Guia MongoDB Shell - Projeto Gestão Fiscal
 
 Este guia mostra como usar o MongoDB Shell (mongosh) para demonstrar o funcionamento do projeto durante o seminário.
 
@@ -10,10 +10,10 @@ Se você está usando o Docker Compose:
 
 ```powershell
 # Acessar o shell do MongoDB no container
-docker exec -it mongodb-v360 mongosh
+docker exec -it mongodb-gestao-fiscal mongosh
 
 # Ou em uma linha:
-docker exec -it mongodb-v360 mongosh --eval "use v360_fiscal"
+docker exec -it mongodb-gestao-fiscal mongosh --eval "use gestao_fiscal_db"
 ```
 
 ### Opção 2: MongoDB Shell Local
@@ -31,7 +31,7 @@ mongosh "mongodb://localhost:27017"
 ### 1. Selecionar o Banco de Dados
 
 ```javascript
-use v360_fiscal
+use gestao_fiscal_db
 ```
 
 ### 2. Ver Todas as Coleções
@@ -359,7 +359,7 @@ Execute este script sequencial para uma demonstração completa:
 
 ```javascript
 // 1. Selecionar banco
-use v360_fiscal
+use gestao_fiscal_db
 
 // 2. Verificar quantos documentos temos
 print("=== TOTAL DE DOCUMENTOS ===")
@@ -434,7 +434,7 @@ WHERE tipo_documento = 'NFe'
 
 ```javascript
 // Ver tudo resumido
-use v360_fiscal
+use gestao_fiscal_db
 db.documentos_fiscais.find({}, {numero: 1, tipo_documento: 1, valor_total: 1, status: 1}).pretty()
 
 // Análise rápida

@@ -334,7 +334,7 @@ router.patch("/documentos/:id/aprovar", async (req: Request, res: Response) => {
         $set: {
           status: "Pronto para Pagamento",
           data_aprovacao: new Date(),
-          aprovador: req.body.aprovador || "Sistema V360",
+          aprovador: req.body.aprovador || "Sistema Gestão Fiscal",
         },
       }
     );

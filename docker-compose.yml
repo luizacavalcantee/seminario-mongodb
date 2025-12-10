@@ -4,13 +4,13 @@ services:
   # Serviço MongoDB
   mongodb:
     image: mongo:latest
-    container_name: mongodb-v360
+    container_name: mongodb-gestao-fiscal
     ports:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
     networks:
-      - v360-network
+      - gestao-fiscal-network
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
       interval: 10s
@@ -20,7 +20,7 @@ services:
   # Serviço da Aplicação Node.js
   app:
     build: .
-    container_name: app-v360
+    container_name: app-gestao-fiscal
     ports:
       - "3000:3000"
     environment:
@@ -30,11 +30,11 @@ services:
       mongodb:
         condition: service_healthy
     networks:
-      - v360-network
+      - gestao-fiscal-network
 
 volumes:
   mongodb_data:
 
 networks:
-  v360-network:
+  gestao-fiscal-network:
     driver: bridge

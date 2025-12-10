@@ -97,10 +97,10 @@ Se você já tem um MongoDB rodando localmente:
 
 ```powershell
 # Build da imagem
-docker build -t v360-api .
+docker build -t gestao-fiscal-api .
 
 # Executar container
-docker run -p 3000:3000 -e MONGODB_URI=mongodb://host.docker.internal:27017 v360-api
+docker run -p 3000:3000 -e MONGODB_URI=mongodb://host.docker.internal:27017 gestao-fiscal-api
 ```
 
 ## 📚 Endpoints
@@ -212,7 +212,7 @@ O `docker-compose.yml` cria dois serviços:
 - **mongodb**: Container com MongoDB na porta 27017
 - **app**: Container com a aplicação Node.js na porta 3000
 
-Os containers se comunicam através de uma rede privada (`v360-network`).
+Os containers se comunicam através de uma rede privada (`gestao-fiscal-network`).
 
 ### Variáveis de Ambiente
 
@@ -285,7 +285,7 @@ npm start
 npm run dev
 
 # Build Docker
-docker build -t v360-api .
+docker build -t gestao-fiscal-api .
 
 # Docker Compose logs
 docker-compose logs -f
@@ -301,7 +301,7 @@ docker system prune -a
 
 ```powershell
 # Se estiver usando Docker Compose
-docker exec -it mongodb-v360 mongosh
+docker exec -it mongodb-gestao-fiscal mongosh
 
 # Se tiver mongosh instalado localmente
 mongosh "mongodb://localhost:27017"
@@ -311,7 +311,7 @@ mongosh "mongodb://localhost:27017"
 
 ```powershell
 # Executar o script de seed
-docker exec -i mongodb-v360 mongosh < seed-data.js
+docker exec -i mongodb-gestao-fiscal mongosh < seed-data.js
 
 # Ou copiar e colar o conteúdo de seed-data.js no mongosh
 ```
@@ -320,7 +320,7 @@ docker exec -i mongodb-v360 mongosh < seed-data.js
 
 ```javascript
 // Selecionar o banco
-use v360_fiscal
+use gestao_fiscal_db
 
 // Ver todos os documentos
 db.documentos_fiscais.find().pretty()

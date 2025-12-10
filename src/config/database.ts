@@ -13,7 +13,7 @@ export async function connectDatabase(): Promise<void> {
     await client.connect();
     console.log("✅ Conectado ao MongoDB! 💾");
 
-    db = client.db("v360_fiscal");
+    db = client.db("gestao_fiscal_db");
     documentosCollection = db.collection<DocumentoFiscal>("documentos_fiscais");
   } catch (error) {
     console.error("\n❌ ERRO FATAL: Falha ao conectar ao MongoDB.");
