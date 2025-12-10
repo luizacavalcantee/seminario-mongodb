@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  # Serviço MongoDB
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb-v360
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - v360-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Serviço da Aplicação Node.js
+  app:
+    build: .
+    container_name: app-v360
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017
+      - NODE_ENV=production
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - v360-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  v360-network:
+    driver: bridge

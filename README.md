@@ -11,26 +11,67 @@ Sistema de demonstração para seminário sobre MongoDB, simulando o V360 - plat
 
 ## 🚀 Como Executar
 
-### Pré-requisitos
+### Opção 1: Docker Compose (Recomendado - Tudo em Containers)
+
+Esta opção executa tanto o MongoDB quanto a aplicação Node.js em containers Docker.
+
+#### Pré-requisitos
+
+- Docker instalado
+- Docker Compose instalado
+
+#### Comandos:
+
+```powershell
+# Iniciar tudo (MongoDB + Aplicação)
+docker-compose up --build
+
+# Iniciar em background (modo detached)
+docker-compose up -d --build
+
+# Ver logs em tempo real
+docker-compose logs -f app
+
+# Parar os containers
+docker-compose down
+
+# Parar e remover volumes (limpa o banco de dados)
+docker-compose down -v
+```
+
+#### Acessar:
+
+- **API**: http://localhost:3000
+- **Documentação Swagger**: http://localhost:3000/api-docs
+
+---
+
+### Opção 2: Desenvolvimento Local (Node.js local + MongoDB no Docker)
+
+Esta opção executa apenas o MongoDB no Docker e a aplicação Node.js localmente.
+
+#### Pré-requisitos
 
 - Node.js (v14 ou superior)
 - Docker (para MongoDB)
 
-### 1. Iniciar o MongoDB com Docker
+#### Passos:
+
+**1. Iniciar o MongoDB com Docker:**
 
 ```powershell
 docker run -d -p 27017:27017 --name mongodb mongo:latest
 ```
 
-### 2. Instalar Dependências
+**2. Instalar Dependências:**
 
 ```powershell
 npm install
 ```
 
-### 3. Executar a Aplicação
+**3. Executar a Aplicação:**
 
-**Modo Desenvolvimento (TypeScript direto):**
+**Modo Desenvolvimento (TypeScript direto com hot reload):**
 
 ```powershell
 npm run dev
@@ -43,10 +84,24 @@ npm run build
 npm start
 ```
 
-### 4. Acessar a API
+#### Acessar:
 
 - **API Base**: http://localhost:3000
 - **Documentação Swagger**: http://localhost:3000/api-docs
+
+---
+
+### Opção 3: Apenas Docker da Aplicação (MongoDB local ou externo)
+
+Se você já tem um MongoDB rodando localmente:
+
+```powershell
+# Build da imagem
+docker build -t v360-api .
+
+# Executar container
+docker run -p 3000:3000 -e MONGODB_URI=mongodb://host.docker.internal:27017 v360-api
+```
 
 ## 📚 Endpoints
 
@@ -131,19 +186,44 @@ curl -X POST http://localhost:3000/captura `
 mongodb-seminario/
 ├── src/
 │   ├── config/
-│   │   ├── database.ts      # Configuração MongoDB
-│   │   └── swagger.ts       # Configuração Swagger
+│   │   ├── database.ts           # Configuração MongoDB
+│   │   └── swagger.ts            # Configuração Swagger
 │   ├── routes/
-│   │   ├── documentos.ts    # Rotas da API
-│   │   └── schemas.ts       # Schemas Swagger
+│   │   ├── documentos.ts         # Rotas da API
+│   │   └── schemas.ts            # Schemas Swagger
 │   ├── types/
-│   │   └── documentoFiscal.ts # Interfaces TypeScript
-│   └── server.ts            # Servidor principal
-├── dist/                    # Código compilado
-├── package.json
-├── tsconfig.json
-└── README.md
+│   │   └── documentoFiscal.ts    # Interfaces TypeScript
+│   └── server.ts                 # Servidor principal
+├── dist/                         # Código compilado (gerado)
+├── Dockerfile                    # Imagem Docker da aplicação
+├── docker-compose.yml            # Orquestração Docker
+├── .dockerignore                 # Arquivos ignorados no build
+├── package.json                  # Dependências e scripts
+├── tsconfig.json                 # Configuração TypeScript
+└── README.md                     # Documentação
 ```
+
+## 🐳 Detalhes Docker
+
+### Arquitetura com Docker Compose
+
+O `docker-compose.yml` cria dois serviços:
+
+- **mongodb**: Container com MongoDB na porta 27017
+- **app**: Container com a aplicação Node.js na porta 3000
+
+Os containers se comunicam através de uma rede privada (`v360-network`).
+
+### Variáveis de Ambiente
+
+| Variável      | Padrão                      | Descrição                                     |
+| ------------- | --------------------------- | --------------------------------------------- |
+| `MONGODB_URI` | `mongodb://localhost:27017` | URI de conexão do MongoDB                     |
+| `NODE_ENV`    | -                           | Ambiente de execução (development/production) |
+
+### Healthcheck
+
+O MongoDB possui healthcheck para garantir que está pronto antes de iniciar a aplicação.
 
 ## 🔍 Demonstração MongoDB vs SQL
 
@@ -177,8 +257,43 @@ db.documentos_fiscais.find({
 - **TypeScript** - Tipagem estática
 - **Express** - Framework web
 - **MongoDB** - Banco de dados NoSQL
-- **Swagger** - Documentação da API
-- **Docker** - Containerização do MongoDB
+- **Swagger/OpenAPI** - Documentação da API
+- **Docker & Docker Compose** - Containerização e orquestração
+
+## ⚡ Quick Start
+
+```powershell
+# Com Docker (mais rápido - tudo incluído)
+docker-compose up -d --build
+
+# Local (desenvolvimento)
+npm install
+docker run -d -p 27017:27017 --name mongodb mongo:latest
+npm run dev
+```
+
+## 🔧 Comandos Úteis
+
+```powershell
+# Build TypeScript
+npm run build
+
+# Produção local
+npm start
+
+# Desenvolvimento local
+npm run dev
+
+# Build Docker
+docker build -t v360-api .
+
+# Docker Compose logs
+docker-compose logs -f
+
+# Limpar tudo do Docker
+docker-compose down -v
+docker system prune -a
+```
 
 ## 👨‍💻 Desenvolvimento
 

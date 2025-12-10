@@ -1,7 +1,8 @@
 import { MongoClient, Db, Collection } from "mongodb";
 import { DocumentoFiscal } from "../types/documentoFiscal";
 
-const uri = "mongodb://localhost:27017";
+// Usa variável de ambiente para Docker ou localhost para desenvolvimento local
+const uri = process.env.MONGODB_URI || "mongodb://localhost:27017";
 const client = new MongoClient(uri);
 
 let db: Db;

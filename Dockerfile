@@ -11,5 +11,11 @@ RUN npm install
 # Copia o código da aplicação
 COPY . .
 
-# Comando para rodar a aplicação (assumindo que o script principal é index.js)
-CMD [ "node", "index.js" ]
+# Compila o TypeScript para JavaScript
+RUN npm run build
+
+# Expõe a porta 3000
+EXPOSE 3000
+
+# Comando para rodar a aplicação compilada
+CMD [ "npm", "start" ]
